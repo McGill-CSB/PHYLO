@@ -60,8 +60,9 @@
 					if($(this).attr("href") == "javascript:void(0);") {
 						var innerSelf = this;
 						if($.timer.active == true) {
-							$.helper.popUp(Mustache.render(trans.get("quitGame"),json),function(status) {
-								if(status == "ok") {
+                            console.log("navBar"+trans.get("quitGame"));
+                            bootbox.confirm(Mustache.render(trans.get("quitGame"),json),function(status) {
+								if(status == true) {
 									window.location.hash = "#!/"+lang+"/"+$(innerSelf).attr("id");		
 									$.timer.stop();
 									//force change
@@ -81,8 +82,8 @@
 				$("a.tablet-back-btn").unbind().click(function() {
 					var innerSelf = this;
 					if($.timer.active == true) {
-						$.helper.popUp("Are you sure you want to quite?",function(status) {
-							if(status == "ok") {
+						bootbox.confirm("Are you sure you want to quite?",function(status) {
+							if(status == true) {
 							//	window.location.hash = "#!"+$(innerSelf).attr("name");		
 								$.timer.stop();
 								$(this).hide();

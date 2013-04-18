@@ -32,11 +32,10 @@
 					height : height,//$("#tree").css("height").replace(/px/,""),
 					rows : 10,
 				};
-				$.lang.init(function() {
+				$.langModule.init(function() {
 					$("#game").show();
 					$.protocal.read(setting);
 					$.storage.queryPuzzle();
-
                     //$.endGame.init("lose");
 				});
 			},

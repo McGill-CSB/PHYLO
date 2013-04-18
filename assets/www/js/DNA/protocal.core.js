@@ -54,20 +54,30 @@
 				mode = 4;
 			}
 			var data = "mode="+mode+"&id="+$.phylo.id+"&user="+window.guest+"&align="+$.board.getJsonAlignments()+"&score="+$.phylo.currentScore;
-            if(self.checkConnection()==false){
-                //TODO save data to local storage if it beat the score
+            var params=[$.phylo.id, window.guest,$.phylo.currentScore];
+            var dbData =[$.phylo.id,window.guest,$.board.getJsonAlignments(),$.phylo.currentScore,mode];
 
+            if(self.checkConnection()== false){
+                //TODO save data to local storage if it beat the score
+               //check local to see if duplicate
+                $.storage.checkScore(params,dbData);
+                $.storage.checkInfo(params,fn);
                 return;
             }
-
+            //may need to update player history, local ranking....
+            //still add to local db if "window guest?"
+            $.storage.uploadSolutions();
             $.ajax({
 				type: "POST",
 				url : url,
 				data : data,
 			}).done(function(re) {
 				var json = eval("["+re+"]")[0];
-				fn(json);
-			}).fail(function() {
+                fn(json);
+                //update local
+                $.storage.updatePuzzleInfo(json);
+			    return;
+            }).fail(function() {
 				console.log(">> failed to connect to database to submit end game score");
 				console.log(">> loading end game dummy data");
 				if(DEV.logging)  {
@@ -75,12 +85,15 @@
 					devTools.prompts.notify({ type:"error", title:"warning", text: "loading end game dummy data"});
 				}
 				//fail to connect
-				var dummy = '{"0":"CONGENITAL PTOSIS","disease_link":"CONGENITAL PTOSIS","1":"67","play_count":"67","2":"13","fail_count":"13","3":"42","best_score":"42","4":"1375","running_score":"1375","5":"unki2aut","highscore_user":"unki2aut"}';
-				var json = eval("["+dummy+"]")[0];
-				fn(json);
-			});
+				//checklocal
+                $.storage.checkScore(params,dbData);
+                $.storage.checkInfo(params,fn);
+                return;
+            });
 			
 		},
+
+
 		//sends highscore to server
 		sendHighScore : function() {
 			//this function is currently turned off.
@@ -163,9 +176,9 @@
 			$.main.callBack();
 		},
 
-        request : function(str,invalidCallback,succCalback,failCallback) {
 
-			$.ajax({
+        request : function(str,invalidCallback,succCalback,failCallback) {
+            $.ajax({
 				url : url,
 				data : str,
 				type : "POST",
@@ -185,8 +198,11 @@
 						console.log(err);
 					return;
 				}
-                if(succCalback!=null) succCalback();//mostly UI trigger
+                if(succCalback!=null){
+                    succCalback();
+                }//mostly UI trigger
                 $.storage.updatePuzzle(j)
+                console.log("Protocal.request:");
                 $.storage.processPuzzleJson(j);
 			}).fail(function() {
 			/* ask local again for random puzzle*/
@@ -197,10 +213,11 @@
 					devTools.prompts.notify({ type:"error", title:"warning", text: "loading dummy data"});
 			   }
                if(failCallback!=null){
+                    console.log("fail");
                     failCallback();
                }
 			});//end failed
-		    },//end request function
+		  },//end request function
 	    };
 
 })();

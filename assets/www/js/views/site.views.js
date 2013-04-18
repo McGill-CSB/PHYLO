@@ -34,6 +34,9 @@
 										window.setTimeout(function() { fn() },100);
 									} else {
                                         //TODO WHY HERE?
+                                        if(DEV.logging) {
+                                            devTools.prompts.notify({ title : "site.view Puzzle Id", text : id});
+                                        }
 										$("#draw").hide();
 										$("#menu").hide();
 										$.main.init({
@@ -47,6 +50,10 @@
 								$("#draw").hide();
 								$("#menu").hide();
                                 //TODO WHY HERE?
+
+                                if(DEV.logging) {
+                                    devTools.prompts.notify({ title : "site.view Puzzle Id", text : id});
+                                }
 								$.main.init({
 									type:"disease",
 									num : id,
@@ -64,6 +71,7 @@
 				request.getTemplate("templates/play.html",function(context) {
 					request.getJsonLang(lang, function(json) {
 						window.lang = json;
+                        console.log("LOG_site.view: render");
 						$("#mid-panel").html(Mustache.render(context,json));
 						request.complete();
 						if(window.DEV.disableMenu) {

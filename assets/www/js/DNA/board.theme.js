@@ -176,7 +176,7 @@
 		},
 		//translates the grid color to its respected nucletide
 		convertColor : function(nuc) {
-                    console.log("LOG_D_board.theme: nuc");
+                    //console.log("LOG_D_board.theme: nuc");
         			if(nuc.hasClass("nuc-G"))
         				return "G";
         			if(nuc.hasClass("nuc-C"))

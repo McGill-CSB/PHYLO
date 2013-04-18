@@ -3,12 +3,20 @@
         "drop 1":"DROP TABLE IF EXISTS Levels",
         "drop 2":"DROP TABLE IF EXISTS Solutions",
         "insert 1":"INSERT INTO Levels (level_id,block_id,difficulty,level_xml,location_offset,end_offset,play_count,fail_count ,best_score,original_score,running_score,disease_link,disease_category,highscore_user,bio_off,block_id_temp) VALUES",
-        "create 1":"CREATE TABLE IF NOT EXISTS Levels (level_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,block_id INTEGER,difficulty INTEGER,level_xml varchar(1500),location_offset INTEGER,end_offset INTEGER,play_count INTEGER,fail_count INTEGER,best_score INTEGER,original_score INTEGER,running_score INTEGER, disease_link varchar(100),disease_category varchar(100),highscore_user varchar(60),bio_off INTEGER NOT NULL,block_id_temp INTEGER NOT NULL,in_XML BOOLEAN DEFAULT true)",
-        "create 2":"CREATE TABLE IF NOT EXISTS Solutions (level_id INTEGER NOT NULL,player_id varchar(50),uploaded BOOLEAN NOT NULL DEFAULT FALSE,PRIMARY KEY(level_id,player_id))"
+        "insert 2":"INSERT INTO Solutions (level_id,player_id,sol_align,score,mode) VALUES ",
+        "insert 3":"INSERT INTO Levels (level_id,level_xml,in_XML) VALUES (?,?,?)",
+        "create 1":"CREATE TABLE IF NOT EXISTS Levels (level_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,block_id INTEGER,difficulty INTEGER,level_xml varchar(1500),location_offset INTEGER,end_offset INTEGER,play_count INTEGER,fail_count INTEGER,best_score INTEGER,original_score INTEGER,running_score INTEGER, disease_link varchar(100),disease_category varchar(100),highscore_user varchar(60),bio_off INTEGER ,block_id_temp INTEGER ,in_XML BOOLEAN DEFAULT true)",
+        "create 2":"CREATE TABLE IF NOT EXISTS Solutions (level_id INTEGER NOT NULL,player_id varchar(50) NOT NULL,sol_align varchar(1500) NOT NULL,score INTEGER NOT NULL,uploaded BOOLEAN NOT NULL DEFAULT FALSE,mode INTEGER NOT NULL,PRIMARY KEY(level_id,player_id))"
     },
     "query":{
         "select 1":"SELECT * FROM Levels WHERE ",
-        "select 2":"SELECT * FROM Levels ORDER BY (level_id * ? % 10000) LIMIT 1"
+        "select 2":"SELECT * FROM Levels ORDER BY (level_id * ? % 10000) LIMIT 1",
+        "select 3":"SELECT * FROM Solutions WHERE uploaded = ?",
+        "select 4":"SELECT * FROM Solutions WHERE level_id =?",
+        "update 1":"UPDATE Solutions Set score=?,sol_align=? WHERE level_id = ? AND player_id = ?",
+        "update 2":"UPDATE Solutions Set uploaded=? WHERE level_id = ? AND player_id = ?",
+        "update 3":"UPDATE Levels SET disease_link=?,play_count=?,fail_count=?,best_score=?,running_score=?,highscore_user=? WHERE level_id = ?",
+        "delete 1":"DELETE FROM Solutions WHERE level_id = ? AND player_id = ?"
     }
 
 

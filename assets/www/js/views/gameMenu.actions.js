@@ -365,7 +365,8 @@
 			var levelselect = function(ctx) {	
 				var menuStrColor = '#444';
 				$("#level_inputbox").show();
-				ctx.beginPath();
+
+                ctx.beginPath();
 				ctx.save();
 				ctx.fillStyle = "rgb(153,50,204)";
 				ctx.fillRect(405,220,170,50);
